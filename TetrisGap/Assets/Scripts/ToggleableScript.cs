@@ -16,18 +16,20 @@ public class ToggleableScript : MonoBehaviour
     private SpriteRenderer sRenderer;
 
     private bool currentlySelected = false;
+    private byte xPosition;
+    private byte yPosition;
+
+    private PlayAreaScript board;
 
     // Start is called before the first frame update
     void Start()
     {
-        sRenderer = GetComponent<SpriteRenderer>();
-        sRenderer.color = defaultColor;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnMouseOver()
@@ -42,8 +44,10 @@ public class ToggleableScript : MonoBehaviour
 
     private void OnMouseDown()
     {
-        SetColorFromState();
         currentlySelected = !currentlySelected;
+        SetColorFromState();
+
+        board.NotifyManagerOfChange(xPosition, yPosition, currentlySelected);
     }
 
     void SetColorFromState()
@@ -57,5 +61,14 @@ public class ToggleableScript : MonoBehaviour
             sRenderer.color = defaultColor;
         }
     }
+    public void SetupToggleable(byte x, byte y, PlayAreaScript _board)
+    {
+        xPosition = x;
+        yPosition = y;
 
+        sRenderer = GetComponent<SpriteRenderer>();
+        sRenderer.color = defaultColor;
+        board = _board;
+        currentlySelected = false;
+    }
 }

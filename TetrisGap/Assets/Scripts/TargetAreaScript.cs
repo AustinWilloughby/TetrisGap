@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayAreaScript : MonoBehaviour
+public class TargetAreaScript : MonoBehaviour
 {
     private byte xSize = 6;
     private byte ySize = 9;
 
     [SerializeField]
-    private GameObject toggleableObjectPrefab;
-
+    private GameObject targetObjectPrefab;
 
     private GameObject anchorObject;
-    private ToggleableScript[,] toggleableObjects;
+    private TargetObjectScript[,] targetObjects;
     private GameplayManager gameManager;
 
 
@@ -24,7 +23,6 @@ public class PlayAreaScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     public void SetupBoard(byte _xSize, byte _ySize, GameplayManager _gameManager)
@@ -34,7 +32,7 @@ public class PlayAreaScript : MonoBehaviour
         gameManager = _gameManager;
 
         anchorObject = gameObject.transform.parent.gameObject;
-        toggleableObjects = new ToggleableScript[xSize, ySize];
+        targetObjects = new TargetObjectScript[xSize, ySize];
         transform.localScale = new Vector3(xSize * 100, ySize * 100, 1);
 
         //Calculate the offset of the bottom left corner from the center of the playfield
@@ -48,17 +46,19 @@ public class PlayAreaScript : MonoBehaviour
         {
             for (byte y = 0; y < ySize; y++)
             {
-                toggleableObjects[x, y] = Instantiate(toggleableObjectPrefab).GetComponent<ToggleableScript>();
-                toggleableObjects[x, y].SetupToggleable(x, y, this);
+                targetObjects[x, y] = Instantiate(targetObjectPrefab).GetComponent<TargetObjectScript>();
 
-                toggleableObjects[x, y].transform.parent = anchorObject.transform;
-                toggleableObjects[x, y].transform.localPosition = new Vector3(xOffset + x, yOffset + y);
+                targetObjects[x, y].transform.parent = anchorObject.transform;
+                targetObjects[x, y].transform.localPosition = new Vector3(xOffset + x, yOffset + y);
+
+                targetObjects[x, y].SetupTarget(x, y, this, Random.Range(0, 2) == 1);
+
+                gameManager.SetTargetToggle(x, y, targetObjects[x, y].CurrentState);
             }
         }
+
+        gameManager.CalculateUnmatched();
     }
 
-    public void NotifyManagerOfChange(byte x, byte y, bool newState)
-    {
-        gameManager.UpdatePlayerToggle(x, y, newState);
-    }
+
 }
