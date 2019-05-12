@@ -9,6 +9,14 @@ public class TargetAreaScript : MonoBehaviour
 
     [SerializeField]
     private GameObject targetObjectPrefab;
+    [SerializeField]
+    private GameObject topBorder;
+    [SerializeField]
+    private GameObject rightBorder;
+    [SerializeField]
+    private GameObject leftBorder;
+    [SerializeField]
+    private GameObject bottomBorder;
 
     private GameObject anchorObject;
     private TargetObjectScript[,] targetObjects;
@@ -29,6 +37,18 @@ public class TargetAreaScript : MonoBehaviour
     {
         xSize = _xSize;
         ySize = _ySize;
+
+        topBorder.transform.localPosition = new Vector3(0, (ySize + 0.5f) / 2.0f, 0);
+        rightBorder.transform.localPosition = new Vector3((xSize + 0.5f) / 2.0f, 0, 0);
+        leftBorder.transform.localPosition = new Vector3(-(xSize + 0.5f) / 2.0f, 0, 0);
+        bottomBorder.transform.localPosition = new Vector3(0, -(ySize + 0.5f) / 2.0f, 0);
+
+        topBorder.transform.localScale = new Vector3(xSize + 1, 0.5f, 1);
+        rightBorder.transform.localScale = new Vector3(0.5f, ySize, 1);
+        leftBorder.transform.localScale = new Vector3(0.5f, ySize, 1);
+        bottomBorder.transform.localScale = new Vector3(xSize + 1, 0.5f, 1);
+
+
         gameManager = _gameManager;
 
         anchorObject = gameObject.transform.parent.gameObject;

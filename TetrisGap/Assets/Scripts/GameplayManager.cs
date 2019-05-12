@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -20,26 +21,32 @@ public class GameplayManager : MonoBehaviour
     private float timePerPuzzle = 20.0f;
 
     [SerializeField]
+    private byte maxLives = 5;
+
+    [SerializeField]
     private PlayAreaScript playerBoard;
 
     [SerializeField]
     private TargetAreaScript targetBoard;
 
 
-    [SerializeField]
+    private TextMeshPro livesText;
+    private TextMeshPro scoreText;
+    
     private GameObject topLeftRail;
-    [SerializeField]
     private GameObject topRightRail;
-    [SerializeField]
     private GameObject bottomLeftRail;
-    [SerializeField]
     private GameObject bottomRightRail;
 
     private float timer;
+    private bool runningTimer = true;
+    private byte lives;
+    private long score;
 
     private void Awake()
     {
         timer = timePerPuzzle;
+        lives = maxLives;
 
         playerInputToggles = new bool[xSize, ySize];
         targetToggles = new bool[xSize, ySize];
@@ -47,25 +54,23 @@ public class GameplayManager : MonoBehaviour
         float xRailOffset = (xSize + 0.1f) / 2.0f;
         float yRailOffset = (ySize + 0.1f) / 2.0f;
 
+        topLeftRail = transform.Find("TopLeftRail").gameObject;
+        topRightRail = transform.Find("TopRightRail").gameObject;
+        bottomLeftRail = transform.Find("BottomLeftRail").gameObject;
+        bottomRightRail = transform.Find("BottomRightRail").gameObject;
+
         topLeftRail.transform.position = new Vector3(-xRailOffset, yRailOffset, 0);
         topRightRail.transform.position = new Vector3(xRailOffset, yRailOffset, 0);
         bottomLeftRail.transform.position = new Vector3(-xRailOffset, -yRailOffset, 0);
         bottomRightRail.transform.position = new Vector3(xRailOffset, -yRailOffset, 0);
 
 
-        float larger = Mathf.Max(xSize, ySize);
-        if (larger > 6)
-        {
-            Vector3 camPos = Camera.main.transform.position;
-            Vector3 camDirect = Camera.main.transform.forward;
+        livesText = topLeftRail.transform.Find("LivesText").GetComponent<TextMeshPro>();
+        scoreText = bottomLeftRail.transform.Find("ScoreText").GetComponent<TextMeshPro>();
 
-            larger = (larger - 6) * 4.5f;
-            Vector3 movement = new Vector3(-1.0f * (camDirect.x + larger), camDirect.y, camDirect.z + larger);
-            Debug.Log(movement);
-
-            Camera.main.transform.position = camPos - movement;
-        }
-    }
+        livesText.SetText("Lives: " + lives);
+        scoreText.SetText("Score: " + score);
+    }   
 
     // Start is called before the first frame update
     void Start()
@@ -77,14 +82,25 @@ public class GameplayManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer -= Time.deltaTime;
-
-        targetBoard.transform.parent.position = new Vector3(0, 0, 50.0f * (timer / timePerPuzzle));
-
-        if(timer < 0)
+        if (runningTimer && lives > 0)
         {
-            timer = timePerPuzzle;
-            // New puzzle / lose life
+            timer -= Time.deltaTime;
+            targetBoard.transform.parent.position = new Vector3(0, 0, 50.0f * (timer / timePerPuzzle));
+
+            if (timer < 0)
+            {
+                CheckSuccess();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                runningTimer = false;
+                targetBoard.transform.parent.DOMoveZ(-20, 1.0f).SetEase(Ease.InQuad).OnComplete(() =>
+                {
+                    CheckSuccess();
+                    runningTimer = true;
+                });
+            }
         }
     }
 
@@ -100,13 +116,6 @@ public class GameplayManager : MonoBehaviour
         {
             numUnmatched++;
         }
-
-        if(numUnmatched <= 0)
-        {
-            targetBoard.GenerateNewBoard();
-            timer = timePerPuzzle;
-        }
-
     }
 
     public void SetTargetToggle(byte xPos, byte yPos, bool targetState)
@@ -127,5 +136,21 @@ public class GameplayManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void CheckSuccess()
+    {
+        if (numUnmatched > 0)
+        {
+            lives--;
+            livesText.SetText("Lives: " + lives);
+        }
+        else
+        {
+            score++;
+            scoreText.SetText("Score: " + score);
+        }
+        targetBoard.GenerateNewBoard();
+        timer = timePerPuzzle;
     }
 }
