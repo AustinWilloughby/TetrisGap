@@ -15,8 +15,6 @@ public class GameplayManager : MonoBehaviour
     private bool[,] playerInputToggles;
     private bool[,] targetToggles;
     private byte numUnmatched;
-    
-    private TextMeshPro timerText;
 
     [SerializeField]
     private float timePerPuzzle = 20.0f;
@@ -27,15 +25,46 @@ public class GameplayManager : MonoBehaviour
     [SerializeField]
     private TargetAreaScript targetBoard;
 
+
+    [SerializeField]
+    private GameObject topLeftRail;
+    [SerializeField]
+    private GameObject topRightRail;
+    [SerializeField]
+    private GameObject bottomLeftRail;
+    [SerializeField]
+    private GameObject bottomRightRail;
+
     private float timer;
 
     private void Awake()
     {
-        timerText = transform.Find("TimerText").GetComponent<TextMeshPro>();
         timer = timePerPuzzle;
 
         playerInputToggles = new bool[xSize, ySize];
         targetToggles = new bool[xSize, ySize];
+
+        float xRailOffset = (xSize + 0.1f) / 2.0f;
+        float yRailOffset = (ySize + 0.1f) / 2.0f;
+
+        topLeftRail.transform.position = new Vector3(-xRailOffset, yRailOffset, 0);
+        topRightRail.transform.position = new Vector3(xRailOffset, yRailOffset, 0);
+        bottomLeftRail.transform.position = new Vector3(-xRailOffset, -yRailOffset, 0);
+        bottomRightRail.transform.position = new Vector3(xRailOffset, -yRailOffset, 0);
+
+
+        float larger = Mathf.Max(xSize, ySize);
+        if (larger > 6)
+        {
+            Vector3 camPos = Camera.main.transform.position;
+            Vector3 camDirect = Camera.main.transform.forward;
+
+            larger = (larger - 6) * 4.5f;
+            Vector3 movement = new Vector3(-1.0f * (camDirect.x + larger), camDirect.y, camDirect.z + larger);
+            Debug.Log(movement);
+
+            Camera.main.transform.position = camPos - movement;
+        }
     }
 
     // Start is called before the first frame update
@@ -49,7 +78,8 @@ public class GameplayManager : MonoBehaviour
     void Update()
     {
         timer -= Time.deltaTime;
-        timerText.SetText(((int)timer).ToString());
+
+        targetBoard.transform.parent.position = new Vector3(0, 0, 50.0f * (timer / timePerPuzzle));
 
         if(timer < 0)
         {
