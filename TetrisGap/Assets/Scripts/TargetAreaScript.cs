@@ -60,5 +60,16 @@ public class TargetAreaScript : MonoBehaviour
         gameManager.CalculateUnmatched();
     }
 
-
+    public void GenerateNewBoard()
+    {
+        for (byte x = 0; x < xSize; x++)
+        {
+            for (byte y = 0; y < ySize; y++)
+            {
+                targetObjects[x, y].SetupTarget(x, y, this, Random.Range(0, 2) == 1);
+                gameManager.SetTargetToggle(x, y, targetObjects[x, y].CurrentState);
+            }
+        }
+        gameManager.CalculateUnmatched();
+    }
 }

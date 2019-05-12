@@ -8,12 +8,15 @@ public class ToggleableScript : MonoBehaviour
     private Color defaultColor;
 
     [SerializeField]
-    private Color mouseOverColor;
+    private Color mouseOverDefaultColor;
 
     [SerializeField]
     private Color selectedColor;
 
-    private SpriteRenderer sRenderer;
+    [SerializeField]
+    private Color mouseOverSelectedColor;
+
+    private MeshRenderer mRenderer;
 
     private bool currentlySelected = false;
     private byte xPosition;
@@ -34,7 +37,14 @@ public class ToggleableScript : MonoBehaviour
 
     private void OnMouseOver()
     {
-        sRenderer.color = mouseOverColor;
+        if (currentlySelected)
+        {
+            mRenderer.material.color = mouseOverSelectedColor;
+        }
+        else
+        {
+            mRenderer.material.color = mouseOverDefaultColor;
+        }
     }
 
     private void OnMouseExit()
@@ -54,11 +64,11 @@ public class ToggleableScript : MonoBehaviour
     {
         if (currentlySelected)
         {
-            sRenderer.color = selectedColor;
+            mRenderer.material.color = selectedColor;
         }
         else
         {
-            sRenderer.color = defaultColor;
+            mRenderer.material.color = defaultColor;
         }
     }
     public void SetupToggleable(byte x, byte y, PlayAreaScript _board)
@@ -66,8 +76,8 @@ public class ToggleableScript : MonoBehaviour
         xPosition = x;
         yPosition = y;
 
-        sRenderer = GetComponent<SpriteRenderer>();
-        sRenderer.color = defaultColor;
+        mRenderer = GetComponent<MeshRenderer>();
+        mRenderer.material.color = defaultColor;
         board = _board;
         currentlySelected = false;
     }

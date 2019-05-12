@@ -94,8 +94,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultColor: {r: 1, g: 1, b: 1, a: 0}
-  mouseOverColor: {r: 1, g: 0.9812064, b: 0, a: 0.5803922}
+  mouseOverDefaultColor: {r: 0.9705882, g: 1, b: 0, a: 0.5254902}
   selectedColor: {r: 0, g: 1, b: 0.122285604, a: 1}
+  mouseOverSelectedColor: {r: 0, g: 1, b: 0.121568635, a: 0.5529412}
 --- !u!61 &-4255435753418840173
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -161,12 +161,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 287262932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f50bc6d88a94a041b4a0489d104c344, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b6f77407ab5f814aaa9c527e5f0432e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 6
-  ySize: 9
-  toggleableObjectPrefab: {fileID: 2680299263950434094, guid: 28971b35db1a1df448065f2e5b5da2b5,
+  targetObjectPrefab: {fileID: 4002884708641945494, guid: 9a03cf7ad0c9d8440bc62c658c4d9d9c,
     type: 3}
 --- !u!212 &287262935
 SpriteRenderer:
@@ -339,9 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f50bc6d88a94a041b4a0489d104c344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 6
-  ySize: 9
-  toggleableObjectPrefab: {fileID: 4728609896848301379, guid: 9b88bc87ec941e54f8ad92943df0f423,
+  toggleableObjectPrefab: {fileID: 3593675113405264601, guid: 234aacff89a92ab44ae12eedb909b572,
     type: 3}
 --- !u!1 &705507993
 GameObject:
@@ -796,6 +792,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c396e5a86af43944fb91a1f6e10101ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 6
-  ySize: 9
+  xSize: 5
+  ySize: 5
   timePerPuzzle: 31
+  playerBoard: {fileID: 696943773}
+  targetBoard: {fileID: 287262934}

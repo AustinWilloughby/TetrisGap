@@ -73,10 +73,8 @@ public class GameplayManager : MonoBehaviour
 
         if(numUnmatched <= 0)
         {
-            // They match
+            targetBoard.GenerateNewBoard();
             timer = timePerPuzzle;
-
-            //Generate new puzzle
         }
 
     }

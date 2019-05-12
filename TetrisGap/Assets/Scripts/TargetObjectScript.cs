@@ -10,7 +10,7 @@ public class TargetObjectScript : MonoBehaviour
     [SerializeField]
     private Color passableColor;
 
-    private SpriteRenderer sRenderer;
+    private MeshRenderer mRenderer;
     
     private TargetAreaScript board;
 
@@ -34,18 +34,18 @@ public class TargetObjectScript : MonoBehaviour
         xPosition = x;
         yPosition = y;
 
-        sRenderer = GetComponent<SpriteRenderer>();
+        mRenderer = GetComponent<MeshRenderer>();
         board = _board;
 
         CurrentState = startingState;
 
         if (CurrentState)
         {
-            sRenderer.color = passableColor;
+            mRenderer.material.color = passableColor;
         }
         else
         {
-            sRenderer.color = impassableColor;
+            mRenderer.material.color = impassableColor;
         }
     }
 }
