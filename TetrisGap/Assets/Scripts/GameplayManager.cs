@@ -32,7 +32,7 @@ public class GameplayManager : MonoBehaviour
 
     private TextMeshPro livesText;
     private TextMeshPro scoreText;
-    
+
     private GameObject topLeftRail;
     private GameObject topRightRail;
     private GameObject bottomLeftRail;
@@ -70,7 +70,7 @@ public class GameplayManager : MonoBehaviour
 
         livesText.SetText("Lives: " + lives);
         scoreText.SetText("Score: " + score);
-    }   
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -89,16 +89,24 @@ public class GameplayManager : MonoBehaviour
 
             if (timer < 0)
             {
-                CheckSuccess();
+                targetBoard.transform.parent.DOMoveZ(-20, 0.6f).SetEase(Ease.InOutExpo).OnComplete(() =>
+                {
+                    CheckSuccess();
+                });
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 runningTimer = false;
-                targetBoard.transform.parent.DOMoveZ(-20, 1.0f).SetEase(Ease.InQuad).OnComplete(() =>
+
+                targetBoard.transform.parent.DOMoveZ(0, 0.4f).SetEase(Ease.InOutExpo);
+
+                DOVirtual.DelayedCall(0.35f, () =>
                 {
-                    CheckSuccess();
-                    runningTimer = true;
+                    targetBoard.transform.parent.DOMoveZ(-16, 0.6f).SetEase(Ease.InExpo).OnComplete(() =>
+                    {
+                        CheckSuccess();
+                    });
                 });
             }
         }
@@ -108,7 +116,7 @@ public class GameplayManager : MonoBehaviour
     {
         playerInputToggles[xPos, yPos] = toggleState;
 
-        if(playerInputToggles[xPos, yPos] == targetToggles[xPos, yPos])
+        if (playerInputToggles[xPos, yPos] == targetToggles[xPos, yPos])
         {
             numUnmatched--;
         }
@@ -126,11 +134,11 @@ public class GameplayManager : MonoBehaviour
     public void CalculateUnmatched()
     {
         numUnmatched = 0;
-        for(byte x = 0; x < xSize; x++)
+        for (byte x = 0; x < xSize; x++)
         {
-            for(byte y = 0; y < ySize; y++)
+            for (byte y = 0; y < ySize; y++)
             {
-                if(playerInputToggles[x,y] != targetToggles[x,y])
+                if (playerInputToggles[x, y] != targetToggles[x, y])
                 {
                     numUnmatched++;
                 }
@@ -151,6 +159,13 @@ public class GameplayManager : MonoBehaviour
             scoreText.SetText("Score: " + score);
         }
         targetBoard.GenerateNewBoard();
-        timer = timePerPuzzle;
+
+        targetBoard.transform.parent.position = new Vector3(0, 0, 1100);
+
+        targetBoard.transform.parent.DOMoveZ(50, 0.25f).SetEase(Ease.InOutExpo).OnComplete(() =>
+        {
+            timer = timePerPuzzle;
+            runningTimer = true;
+        });
     }
 }

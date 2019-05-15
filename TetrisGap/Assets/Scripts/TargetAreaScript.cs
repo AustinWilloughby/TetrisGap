@@ -90,6 +90,7 @@ public class TargetAreaScript : MonoBehaviour
                 gameManager.SetTargetToggle(x, y, targetObjects[x, y].CurrentState);
             }
         }
+        
         gameManager.CalculateUnmatched();
     }
 }

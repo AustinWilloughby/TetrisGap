@@ -1021,7 +1021,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1062,7 +1062,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0.20633969, z: -0, w: 0.9784805}
-  m_LocalPosition: {x: 9.6, y: 0, z: -22.2}
+  m_LocalPosition: {x: 8.4, y: 0, z: -19.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1740,6 +1740,6 @@ MonoBehaviour:
   xSize: 5
   ySize: 5
   timePerPuzzle: 31
-  maxLives: 5
+  maxLives: 255
   playerBoard: {fileID: 696943773}
   targetBoard: {fileID: 287262934}
